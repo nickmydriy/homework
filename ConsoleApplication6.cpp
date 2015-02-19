@@ -23,7 +23,6 @@ void error_in(string s, char c)                 // processing error
 		cout << "Error! Invalid sign format!";
 		exit(0);
 	}
-	
 }
 
 void error_brakets(int i)                        // processing error
