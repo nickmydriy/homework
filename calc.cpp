@@ -164,5 +164,4 @@ int main()
 {
 	int ans = build_st(0);                                       // run function
 	cout << ans;                                                // output
-	system("pause");
 }
