@@ -162,6 +162,8 @@ long build_st(int level)                                  // build stack
 
 int main()
 {
+	cout << "Please, enter your expression;" << "\n";
+	cout << "All numbers, symbols and brakets are isolated by spaces. After the last number (bracket) follows a newline." << "\n";
 	int ans = build_st(0);                                       // run function
 	cout << ans;                                                // output
 }
