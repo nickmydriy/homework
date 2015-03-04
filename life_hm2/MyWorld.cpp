@@ -72,7 +72,6 @@ void world_out_line()                                       // output world
 			}
 			break;
 		}
-
 	}
 }
 
