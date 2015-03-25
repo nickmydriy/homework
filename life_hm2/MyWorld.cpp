@@ -336,7 +336,7 @@ int main()
 {
 	int steps, size, count;
 	cout << "Please, check this on Windows. Good luck." << "\n" <<"\n";
-	cout << "Please, Enter the size of the start of the field and the number of simulation steps." << "\n"<< "\n";
+	cout << "Please, Enter 2 numbers, the size of the start of the field (square) and the number of simulation steps." << "\n"<< "\n";
 	cin >> size >> steps;
 	//world_ini(size, count);
 	cout << "Please, Enter start of the field. (1 - populated, 0 - non populated)" << "\n" << "\n";
