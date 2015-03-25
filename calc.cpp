@@ -1,4 +1,3 @@
-
 //program calculator
 //NB: All numbers, symbols and brakets are isolated by spaces. After the last number (bracket) follows a newline ('\ n').
 //PS: Result and the value shall not exceed the type int.
@@ -11,11 +10,22 @@ using namespace std;
 vector<vector<pair<int, char>>> st;             // st - stack containing only numbers and sign, without brakets;
 int br_checker;
 
+bool is_number(string s)                   
+{
+	for (int i = 0; i < s.length(); i++)
+	{
+		int a = (int)s[i] - (int)'0';
+	    if (!( a < 9 && a > 0) && !(s[i] == '-' && i == 0))
+			return 1;
+	}
+	return 0;
+}
+
 void error_in(string s, char c)                 // processing error
 {
-	if (c == 'n' && stoi(s) == 0 && s != "0")
+	if (c == 'n' && is_number(s) == 1 && s != "0")
 	{
-		cout << "Error! Invalid number format!";
+		cout << "Error! Invalid number format! (Or missing space between characters, brackets, numbers)";
 		exit(0);
 	}
 	if (c == 's' && s != "+" && s!= "-" && s != "*" && s != "/" && s != "%" && s != ")")
@@ -23,7 +33,7 @@ void error_in(string s, char c)                 // processing error
 		cout << "Error! Invalid sign format!";
 		exit(0);
 	}
-	
+			
 }
 
 void error_brakets(int i)                        // processing error
@@ -96,7 +106,8 @@ long build_st(int level)                                  // build stack
 		{
 			if (getchar() == (int)'\n')                        // if we found '\n' then we must numerate general expression
 			{
-				error_brakets(br_checker);                     // processing error
+				error_brakets(br_checker);
+				error_in(value , 'n');                  // processing error
 				st[level].push_back(pair<int, char>());
 				number = stoi(value);
 				st[level][j].first = number;
@@ -165,5 +176,6 @@ int main()
 	cout << "Please, enter your expression;" << "\n";
 	cout << "All numbers, symbols and brakets are isolated by spaces. After the last number (bracket) follows a newline." << "\n";
 	int ans = build_st(0);                                       // run function
-	cout << ans;                                                // output
+	cout << ans;                                              // output
+	
 }
