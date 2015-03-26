@@ -72,6 +72,11 @@ long calc_st(int level)     // function that calculate expression in the brakets
 			else
 				if (st[level][i].second == '%')
 				{
+					if (st[level][i+1].first == 0)       // processing error
+				        {
+				        	cout << "Error! Division by zero!";
+				        	exit(0);
+				        }
 					st[level][i].first %= st[level][i+1].first;
 					st[level][i].second = st[level][i+1].second;
 					st[level].erase(st[level].begin() + i + 1);
