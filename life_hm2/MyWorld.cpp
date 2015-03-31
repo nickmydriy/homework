@@ -51,10 +51,10 @@ void world_out_line()                                       // output world
 					cout << "# ";
 				else 
 					cout << "* ";
-			cout << "\n";
+			cout << endl;
 		}
-		cout << "\n" << "left = " << left << "; right = " << right << "; bot = " << bot << "; top = " << top << "\n";
-		cout << "size = " << right - left;
+		cout << "\n" << "left = " << left << "; right = " << right << "; bot = " << bot << "; top = " << top << endl;
+		cout << "size = " << right - left << endl;
 		char c = gtchar;
 		switch ( c )
 		{
