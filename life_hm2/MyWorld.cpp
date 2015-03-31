@@ -1,17 +1,38 @@
-// Please Check this on Windows ( I didnt found anything about using _getch() on Lunix ":(")
 #include <iostream>
-#include "conio.h"
+#include "stdafx.h"
+
 #ifdef WIN32
 #include <windows.h>
+#include "conio.h"
 #define CLEAR_SCREEN "cls"
+#define gtchar _getch()
 #else
 #define CLEAR_SCREEN "clear"
+#include <termios.h>
+#include <unistd.h>
+#define gtchar mygetch()
+int mygetch( ) {
+  struct termios oldt,
+                 newt;
+  int            ch;
+  tcgetattr( STDIN_FILENO, &oldt );
+  newt = oldt;
+  newt.c_lflag &= ~( ICANON | ECHO );
+  tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+  ch = getchar();
+  tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+  return ch;
+}
 #endif
+
+
 using namespace std;
 
 bool **world;                                               // our world
 int height, width;                                          
 int population, born, die, step_no_changes, pop_size;
+
+
 
 void world_out_line()                                       // output world
 {
@@ -22,6 +43,7 @@ void world_out_line()                                       // output world
 	while(1)
 	{
 		system (CLEAR_SCREEN);
+		cout << "Movement on the field with WASD('w'(up), 's'(down), 'a'(left), 'd'(right));" << endl;
 		for( int i = bot; i < top; i++)
 		{
 			for( int j = left; j < right; j++)
@@ -31,11 +53,12 @@ void world_out_line()                                       // output world
 					cout << "* ";
 			cout << "\n";
 		}
-		cout <<"\n"<< "left = " << left << "; right = " << right << "; bot = " << bot << "; top = " << top;
-		char c = _getch();
+		cout << "\n" << "left = " << left << "; right = " << right << "; bot = " << bot << "; top = " << top << "\n";
+		cout << "size = " << right - left;
+		char c = gtchar;
 		switch ( c )
 		{
-		case 72:
+		case 'w':
 			{
 				if (bot > 0)
 				{
@@ -44,7 +67,7 @@ void world_out_line()                                       // output world
 				}
 			}
 			break;
-		case 80:
+		case 's':
 			{
 				if (top < height)
 				{
@@ -53,7 +76,7 @@ void world_out_line()                                       // output world
 				}
 			}
 			break;
-		case 77:
+		case 'd':
 			{
 				if (right < width)
 				{
@@ -62,7 +85,7 @@ void world_out_line()                                       // output world
 				}
 			}
 			break;
-		case 75:
+		case 'a':
 			{
 				if (left > 0)
 				{
@@ -72,6 +95,7 @@ void world_out_line()                                       // output world
 			}
 			break;
 		}
+
 	}
 }
 
@@ -335,8 +359,8 @@ void world_ini_user(int size)                         //user initilization
 int main()
 {
 	int steps, size, count;
-	cout << "Please, check this on Windows. Good luck." << "\n" <<"\n";
-	cout << "Please, Enter 2 numbers, the size of the start of the field (square) and the number of simulation steps." << "\n"<< "\n";
+	//cout << "Please, check this on Windows. Good luck." << "\n" <<"\n";
+	cout << "Please, Enter the size of the start of the field and the number of simulation steps." << "\n"<< "\n";
 	cin >> size >> steps;
 	//world_ini(size, count);
 	cout << "Please, Enter start of the field. (1 - populated, 0 - non populated)" << "\n" << "\n";
@@ -349,4 +373,3 @@ int main()
 	cout << "Please, Enter desired size of field."<<"\n";
 	world_out_line();	
 }
-
