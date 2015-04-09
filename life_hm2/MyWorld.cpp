@@ -1,5 +1,4 @@
 #include <iostream>
-#include "stdafx.h"
 
 #ifdef WIN32
 #include <windows.h>
