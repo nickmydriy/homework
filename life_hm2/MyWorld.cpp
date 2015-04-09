@@ -29,74 +29,11 @@ using namespace std;
 
 bool **world;                                               // our world
 int height, width;                                          
-int population, born, die, step_no_changes, pop_size;
+int population, born, die, step_no_changes = -1, pop_size;
 
 
 
-void world_out_line()                                       // output world
-{
-	int value;
-	cin >> value;
-	int left = max(width / 2 - value / 2,0), right = min(width / 2 + value / 2, width - 1);
-	int bot = max(height / 2 - value / 2,0), top = min(height / 2 + value / 2, height - 1);
-	while(1)
-	{
-		system (CLEAR_SCREEN);
-		cout << "Movement on the field with WASD('w'(up), 's'(down), 'a'(left), 'd'(right));" << endl;
-		for( int i = bot; i < top; i++)
-		{
-			for( int j = left; j < right; j++)
-				if( world[i][j] == 1)
-					cout << "# ";
-				else 
-					cout << "* ";
-			cout << endl;
-		}
-		cout << "\n" << "left = " << left << "; right = " << right << "; bot = " << bot << "; top = " << top << endl;
-		cout << "size = " << right - left << endl;
-		char c = gtchar;
-		switch ( c )
-		{
-		case 'w':
-			{
-				if (bot > 0)
-				{
-					top--;
-					bot--;
-				}
-			}
-			break;
-		case 's':
-			{
-				if (top < height)
-				{
-					top++;
-					bot++;
-				}
-			}
-			break;
-		case 'd':
-			{
-				if (right < width)
-				{
-					right++;
-					left++;
-				}
-			}
-			break;
-		case 'a':
-			{
-				if (left > 0)
-				{
-					right--;
-					left--;
-				}
-			}
-			break;
-		}
 
-	}
-}
 
 void world_new(int side,int del) //memory allocation, memory removing; side : 0-bot,1-top,2-left,3-right; del : the number of rows to delete
 {
@@ -141,7 +78,8 @@ void world_new(int side,int del) //memory allocation, memory removing; side : 0-
 }
 
 void world_ini( int size, int count)            // custom initialization
-{
+{	
+	pop_size = count;
 	world = new bool*[size + 4];
 	for( int i = 0; i < size + 4; i++)
 		world[i] = new bool[size + 4];
@@ -201,11 +139,16 @@ int pop()                        // calculation of population size
 
 
 
-void world_step( int i)          // step of simulation
+void world_step(int i)          // step of simulation
 {
-	if(i % 10 == 0)               // every 10 steps delete ussles data
+	if(i % 10 == 0 || i == 1)               // every 10 steps delete ussles data
 	{
-		cout << i << " step: population size: " << pop() << "\n" << "born/die: " << (float)born/die << "\n";  //statistic
+		if (i != 1) {
+			if (die != 0 )
+				cout << i << " step: population size: " << pop() << "\n" << "born/die: " << (float)born/die << "\n";  //statistic
+			else 
+				cout << i << " step: population size: " << pop() << "\n" << "born/die: no deaths in this periode" << "\n";
+		}
 		born = 0; 
 		die = 0;
 		int x = 0;
@@ -274,8 +217,7 @@ void world_step( int i)          // step of simulation
 		if( width - 1 - x > 2)
 			world_new(3, width - 2 - x);
 	}
-	bool **c_world;                                // step of simulation
-	int pop_change = pop();
+	bool **c_world;                                // step of simulation	
 	c_world = new bool*[height];                   // array of changes
 	for( int i = 0; i < height; i++)
 		c_world[i] = new bool[width];
@@ -293,10 +235,10 @@ void world_step( int i)          // step of simulation
 						if (world[z][v] == 1)
 							count++;
 				if(count != 3 && count != 4)
+				{
 					c_world[i][j] = 1;
-				else
 					die++;
-
+				}
 			}
 			else
 			{
@@ -323,17 +265,103 @@ void world_step( int i)          // step of simulation
 					else world[i][j] = 1;
 				}
 			}
-			if(pop_change == pop() && step_no_changes == 0)
-				step_no_changes = i;
-			else
-				step_no_changes == 0;
+			if (born == die) {
+				if (step_no_changes == -1) {
+					step_no_changes = i;
+				}
+			} else {
+				step_no_changes = -1;
+			}
 
-			for( int i = 0; i < height; i++)
+			for (int i = 0; i < height; i++)
 				delete[] c_world[i];
 			delete[] c_world;
 			world_boarder_check();                    //checker
 
 
+}
+
+void world_out_line()                                       // output world
+{
+	int value;
+	cin >> value;
+	int left = max(width / 2 - value / 2,0), right = min(width / 2 + value / 2, width - 1);
+	int bot = max(height / 2 - value / 2,0), top = min(height / 2 + value / 2, height - 1);
+	while(1)
+	{
+		system (CLEAR_SCREEN);
+		cout << "Movement on the field with WASD('w'(up), 's'(down), 'a'(left), 'd'(right));" << endl;
+		cout << "Press 'n' for next step" << endl;
+		cout << "O";
+		for( int j = left; j < right; j++)
+			cout << '-';
+		cout << "O";
+		cout << endl;
+		
+		for( int i = bot; i < top; i++)
+		{
+			cout << '|';
+			for( int j = left; j < right; j++)
+				if( world[i][j] == 1)
+					cout << "#";
+				else 
+					cout << " ";
+			cout << '|';
+			cout << endl;
+		}
+		cout << "O";
+		for( int j = left; j < right; j++)
+			cout << '-';
+		cout << "O";
+		cout << endl;
+		cout << "\n" << "left = " << left << "; right = " << right << "; bot = " << bot << "; top = " << top << endl;
+		cout << "size = " << right - left << endl;
+		char c = gtchar;
+		switch ( c )
+		{
+		case 'w':
+			{
+				if (bot > 0)
+				{
+					top--;
+					bot--;
+				}
+			}
+			break;
+		case 's':
+			{
+				if (top < height)
+				{
+					top++;
+					bot++;
+				}
+			}
+			break;
+		case 'd':
+			{
+				if (right < width)
+				{
+					right++;
+					left++;
+				}
+			}
+			break;
+		case 'a':
+			{
+				if (left > 0)
+				{
+					right--;
+					left--;
+				}
+			}
+			break;
+		case 'n' :
+			{
+				world_step(0);
+			}
+			break;
+		}
+	}
 }
 
 void world_ini_user(int size)                         //user initilization
@@ -355,19 +383,41 @@ void world_ini_user(int size)                         //user initilization
 	height = size + 4;
 }
 
+void ini_type(int size) 
+{
+	char c;
+	cout << "Do you want to enter start of the field by yourself? (Y/N);" << "\n" << "\n";
+	cin >> c;
+	if (c == 'Y') 
+	{
+		cout << "Please, Enter start of the field. (1 - populated, 0 - non populated)" << "\n" << "\n";
+		world_ini_user(size);
+	}
+	else
+		if (c == 'N')
+		{
+			cout << "Please, Enter the desired size of the initial population." << "\n" << "\n";
+			int count;
+			cin >> count;
+			world_ini(size, count);
+		}
+		else
+		{
+			ini_type(size);
+		}
+}
+
 int main()
 {
 	int steps, size, count;
 	//cout << "Please, check this on Windows. Good luck." << "\n" <<"\n";
-	cout << "Please, Enter 2 numbers, the size of the start of the field(square) and the number of simulation steps." << "\n"<< "\n";
-	cin >> size >> steps;
-	//world_ini(size, count);
-	cout << "Please, Enter start of the field. (1 - populated, 0 - non populated)" << "\n" << "\n";
-	world_ini_user(size);
-	for( int i = 1; i < steps; i++)
+	cout << "Please, Enter the size of the start of the field and the number of simulation steps." << "\n"<< "\n";
+	cin >> size >> steps;	
+	ini_type(size);	
+	for( int i = 1; i <= steps; i++)
 		world_step(i);
 	cout << "population growth: " << pop() - pop_size << "\n" << "\n";
-	if(step_no_changes != 0)
+	if(step_no_changes != -1)
 		cout << "after " << step_no_changes << " step population didnt changes" << "\n"<< "\n";
 	cout << "Please, Enter desired size of field."<<"\n";
 	world_out_line();	
