@@ -19,11 +19,11 @@ void settings::reload() {
 }
 
 std::string const & settings::get(std::string const & name, std::string const & def) const {
-	try {
+	if (Settings.count(name) != 0)
 		return Settings.at(name);
-	} catch(out_of_range) {
-		return def;
-	}
+	else 
+	        return def;
+	
 }
 
 void settings::set(std::string const & name, std::string const & value) {
