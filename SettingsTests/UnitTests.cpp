@@ -48,7 +48,8 @@ private :
 		nsett->reset();
 
 		for (int i = 0; i < 7; i++) {
-			string res = Compare(def, nsett->get(sett[i], def));
+			string hh = nsett->get(sett[i], def);
+			string res = Compare(def, hh);
 			testresult[4] = res;
 		}
 
@@ -84,15 +85,15 @@ public :
 				cout << testresult[1];
 			} else {
 				string testmessage[6] = {
-					"settings create", 
-					"settings set",
-					"settings get",
-					"settings reload",
-					"settings reset",
-					"settings save"
+					"Settings create", 
+					"Settings set",
+					"Settings get",
+					"Settings reload",
+					"Settings reset",
+					"Settings load from file"
 				};
 				for (int i = 0; i < 6; i++) {
-					cout << "Testing " << testmessage[i] << " : " << testresult[i] << endl;
+					cout << testmessage[i] << " : " << testresult[i] << endl;
 				}
 			}
 		}
@@ -103,5 +104,4 @@ int main() {
 	SettingsTests *tests = new SettingsTests();
 	tests->runTest();
 }
-
 
