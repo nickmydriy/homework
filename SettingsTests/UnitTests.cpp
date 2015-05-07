@@ -2,8 +2,6 @@
 #include <string.h>
 using namespace std;
 
-
-
 class SettingsTests {	
 private :
 	string testresult[6];
@@ -104,7 +102,6 @@ public :
 int main() {
 	SettingsTests *tests = new SettingsTests();
 	tests->runTest();
-	system("pause");
 }
 
 
