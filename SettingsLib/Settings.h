@@ -12,38 +12,6 @@ class settings {
 		void save();
 		void CheckFile();
 	public:
-		class param {
-			private:
-				param(param const &);
-			public:
-				operator std::string() const;
-				operator int() const;
-				operator bool() const;
-				operator double() const;
- 
-				param & operator=(std::string const &);
-				param & operator=(int);
-				param & operator=(bool);
-				param & operator=(double);
- 
-				param & operator+=(std::string const &);
-				param & operator+=(int);
-				param & operator+=(double);
- 
-				param & operator-=(int);
-				param & operator-=(double);
- 
-				param & operator*=(int);
-				param & operator*=(double);
- 
-				param & operator/=(int);
-				param & operator/=(double);
- 
-				param & operator|=(bool);
-				param & operator&=(bool);
-                bool is_empty() const;
-		};
- 
 		// Main functions
  
 		/**
@@ -75,17 +43,4 @@ class settings {
 		 * Reload all settings from file
 		 */	
 		void reload();
- 
-		// Advanced funñtions	
- 
-		/**
-		  * Get constant setting wrapper
-		  * \param name Setting unique identifier
-		  */
-		const param operator[](std::string const & name) const;
-		/**
-		  * Get constant setting wrapper
-		  * \param name Setting unique identifier
-		  */
-		param operator[](std::string const & name);
 };
